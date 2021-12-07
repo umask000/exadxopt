@@ -10,6 +10,8 @@ import numpy
 from copy import deepcopy
 
 from setting import *
+from src.algorithm import BaseAlgorithm, NaiveGreedy, GreedyOpt, ADXOpt2014, ADXOpt2016
+from src.choice_model import MultiNomialLogit, NestedLogit2, MixedLogit
 from src.utils import random_split
 
 # 多项逻辑模型实例化
@@ -115,6 +117,26 @@ def generate_params_for_ML(args):
 	}
 	return params
 
+# 随机生成给定配置下的模型实例，并求解最优解的生成器
+def generate_model_instance_and_solve(model_name, model_args, n_sample=1000):
+	model_name = model_name.replace(' ', '').lower()
+	assert model_name in MODEL_MAPPING
+	Model = eval(MODEL_MAPPING[model_name]['class'])
+	generate_params_function = eval(MODEL_MAPPING[model_name]['param'])
+		
+	for _ in range(n_sample):
+		# 随机生成模型参数与模型实例
+		model_params = generate_params_function(model_args)
+		model = Model(**model_params)
+		
+		# 穷举精确求解所有的最优解
+		max_revenue, optimal_solutions = BaseAlgorithm.bruteforce(model=model, 
+																  min_size=1, 
+																  max_size=model.offerset_capacity)
+		
+		yield model, max_revenue, optimal_solutions
+		
+		
 # 算法实例化
 def generate_algorithm_args(algorithm_name, **kwargs):
 	if algorithm_name == 'naivegreedy_forward':
@@ -250,4 +272,5 @@ def generate_algorithm_args(algorithm_name, **kwargs):
 		raise NotImplementedError
 		
 	return params
+
 

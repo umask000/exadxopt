@@ -3,6 +3,7 @@
 # @email: caoyang@163.sufe.edu.cn
 # 主程序
 
+import os
 import numpy
 from pprint import pprint
 
@@ -11,7 +12,7 @@ from setting import *
 
 from src.algorithm import BaseAlgorithm, NaiveGreedy, GreedyOpt, ADXOpt2014, ADXOpt2016
 from src.choice_model import MultiNomialLogit, NestedLogit2, MixedLogit
-from src.plot_tools import plot_main_1_to_4, plot_main_adxopt2014_for_nl2_further_analysis
+from src.plot_tools import plot_main_1_to_4, plot_main_adxopt2014_for_nl2_further_analysis, plot_main_adxopt2014_for_nl2_further_analysis_new
 from src.simulation_tools import generate_params_for_ML, generate_params_for_MNL, generate_params_for_NL2
 from src.utils import load_args
 # ----------------------------------------------------------------------
@@ -140,5 +141,7 @@ if __name__ == '__main__':
 	# test_ML(False)
 	# test_naivegreedy(True, True)
 	
-	# plot_main_1_to_4(do_export=False)
+	plot_main_1_to_4(do_export=False)
 	plot_main_adxopt2014_for_nl2_further_analysis(do_export=False)
+	plot_main_adxopt2014_for_nl2_further_analysis_new(do_export=True)
+	
